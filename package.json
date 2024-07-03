@@ -16,9 +16,11 @@
     "dev:firefox": "turbo ready && cross-env __FIREFOX__=true turbo watch dev --concurrency 20",
     "test": "turbo test",
     "type-check": "turbo type-check",
-    "lint": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
-    "lint:fix": "turbo lint:fix --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
-    "prettier": "turbo prettier --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
+    "lint": "turbo lint -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:fix": "turbo lint:fix -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
+    "eslint:report": "pnpm -r --stream run eslint:report",
+    "prettier:report": "prettier \"**/*.{js,jsx,tsx,ts,scss,json}\" --check",
+    "prettier": "turbo prettier -- --cache --cache-location node_modules/.cache/.prettiercache",
     "prepare": "husky install"
   },
   "type": "module",
@@ -27,13 +29,15 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "19.3.0",
+    "@commitlint/config-conventional": "19.2.2",
     "@types/chrome": "^0.0.268",
-    "@types/node": "^20.12.11",
+    "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "@vitejs/plugin-react-swc": "^3.6.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "autoprefixer": "^10.4.19",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",
@@ -46,18 +50,32 @@
     "eslint-plugin-react-hooks": "4.6.2",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
-    "postcss": "^8.4.38",
+    "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "rimraf": "^5.0.7",
     "tailwindcss": "^3.4.4",
     "tslib": "^2.6.3",
-    "turbo": "^2.0.3",
+    "turbo": "^2.0.6",
     "typescript": "5.4.5",
-    "vite": "^5.2.11"
+    "vite": "^5.3.3"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "**/*.{js,mjs,ts,tsx,md,mdx}": [
+      "eslint --fix",
+      "prettier --check --write"
+    ],
+    "**/*.css": [
+      "stylelint --allow-empty-input",
       "prettier --write"
+    ],
+    "**/*.{json,yml}": [
+      "prettier --check --write"
+    ],
+    "**/*.{scss,html}": [
+      "prettier --write"
+    ],
+    "**/*.{ts,tsx}": [
+      "tsc --noEmit"
     ]
   },
   "packageManager": "pnpm@9.4.0",
