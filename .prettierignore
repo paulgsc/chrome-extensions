@@ -9,3 +9,21 @@ node_modules
 LICENSE
 *.md
 pnpm-lock.yaml
+
+# testing
+coverage
+
+# misc
+.cache
+.DS_Store
+package-lock.json
+yarn.lock
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+public
+static
+docs
