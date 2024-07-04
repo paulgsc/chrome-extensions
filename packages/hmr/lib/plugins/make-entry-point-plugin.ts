@@ -8,11 +8,11 @@ import type { PluginOption } from 'vite';
 
 export function makeEntryPointPlugin(): PluginOption {
   const cleanupTargets = new Set<string>();
-  const isFirefox = process.env.__FIREFOX__ === 'true';
+  const isFirefox = process.env['__FIREFOX__'] === 'true';
 
   return {
     name: 'make-entry-point-plugin',
-    generateBundle(options, bundle) {
+    generateBundle(options, bundle): void {
       const outputDir = options.dir;
       if (!outputDir) {
         throw new Error('Output directory not found');
@@ -36,6 +36,7 @@ export function makeEntryPointPlugin(): PluginOption {
             fs.writeFileSync(path.resolve(outputDir, newFileName), module.code);
             if (isFirefox) {
               const contentDirectory = extractContentDir(outputDir);
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               module.code = `import(browser.runtime.getURL("${contentDirectory}/${newFileName}"));`;
             } else {
               module.code = `import('./${newFileName}');`;
@@ -45,7 +46,7 @@ export function makeEntryPointPlugin(): PluginOption {
         }
       }
     },
-    closeBundle() {
+    closeBundle(): void {
       cleanupTargets.forEach(target => {
         fs.unlinkSync(target);
       });
@@ -57,7 +58,7 @@ export function makeEntryPointPlugin(): PluginOption {
  * Extract content directory from output directory for Firefox
  * @param outputDir
  */
-function extractContentDir(outputDir: string) {
+function extractContentDir(outputDir: string): string[] {
   const parts = outputDir.split(path.sep);
   const distIndex = parts.indexOf('dist');
   if (distIndex !== -1 && distIndex < parts.length - 1) {
