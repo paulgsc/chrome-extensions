@@ -1,4 +1,4 @@
-import { ManifestParserInterface, Manifest } from './type';
+import type { Manifest, ManifestParserInterface } from './type';
 
 export const ManifestParserImpl: ManifestParserInterface = {
   convertManifestToString: (manifest, env) => {
@@ -9,22 +9,22 @@ export const ManifestParserImpl: ManifestParserInterface = {
   },
 };
 
-function convertToFirefoxCompatibleManifest(manifest: Manifest) {
+function convertToFirefoxCompatibleManifest(manifest: Manifest): Manifest {
   const manifestCopy = {
     ...manifest,
-  } as { [key: string]: unknown };
+  } as Record<string, unknown>;
 
-  manifestCopy.background = {
+  manifestCopy['background'] = {
     scripts: [manifest.background?.service_worker],
     type: 'module',
   };
-  manifestCopy.options_ui = {
+  manifestCopy['options_ui'] = {
     page: manifest.options_page,
     browser_style: false,
   };
-  manifestCopy.content_security_policy = {
+  manifestCopy['content_security_policy'] = {
     extension_pages: "script-src 'self'; object-src 'self'",
   };
-  delete manifestCopy.options_page;
+  delete manifestCopy['options_page'];
   return manifestCopy as Manifest;
 }
