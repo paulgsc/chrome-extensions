@@ -91,7 +91,7 @@
       "prettier --write"
     ],
     "**/*.{ts,tsx}": [
-      "tsc --noEmit"
+      "tsc-files --noEmit"
     ]
   },
   "packageManager": "pnpm@9.4.0",
