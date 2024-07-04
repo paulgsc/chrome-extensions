@@ -10,17 +10,18 @@ class ErrorBoundary extends Component<
     hasError: boolean;
   }
 > {
-  state = { hasError: false };
+  override state = { hasError: false };
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(): { hasError: boolean } {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    // eslint-disable-next-line no-console
     console.error(error, errorInfo);
   }
 
-  render() {
+  override render(): ReactElement {
     if (this.state.hasError) {
       return this.props.fallback;
     }
@@ -33,7 +34,7 @@ export function withErrorBoundary<T extends Record<string, unknown>>(
   Component: ComponentType<T>,
   ErrorComponent: ReactElement,
 ) {
-  return function WithErrorBoundary(props: T) {
+  return function WithErrorBoundary(props: T): JSX.Element {
     return (
       <ErrorBoundary fallback={ErrorComponent}>
         <Component {...props} />
