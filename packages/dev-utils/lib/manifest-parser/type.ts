@@ -1,5 +1,5 @@
 export type Manifest = chrome.runtime.ManifestV3;
 
-export interface ManifestParserInterface {
+export type ManifestParserInterface = {
   convertManifestToString: (manifest: Manifest, env: 'chrome' | 'firefox') => string;
-}
+};
